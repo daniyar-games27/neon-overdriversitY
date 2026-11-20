@@ -94,3 +94,13 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .difficulty-picker{display:block;margin:10px 0 12px;color:#7defff;font-size:10px;letter-spacing:2px;text-align:left}
 .difficulty-picker select{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid rgba(0,234,255,.35);border-radius:8px;background:#0a1424;color:#e9fbff;font:inherit;letter-spacing:1px}
 #difficulty-status{margin-top:5px;color:#ff79ca;font-size:9px;letter-spacing:1.5px}
+
+
+/* v0.8: dedicated daily protocols screen */
+.daily-open-button{margin-top:10px;padding:11px 12px;border-color:rgba(255,43,155,.45);background:rgba(255,43,155,.09);color:#ff9acb;font-size:10px}
+.daily-open-button:hover{background:rgba(255,43,155,.18);box-shadow:0 0 18px rgba(255,43,155,.15)}
+.daily-screen-panel{width:min(520px,100%)}
+.daily-screen-list{display:grid;gap:12px;max-height:55dvh;overflow:auto;margin:16px 0}
+.daily-screen-list .daily-row{padding:14px;background:rgba(0,234,255,.045);border:1px solid rgba(0,234,255,.18);font-size:12px}
+.daily-screen-list .daily-row strong{font-size:10px}
+.daily-screen-list .daily-track{height:6px}

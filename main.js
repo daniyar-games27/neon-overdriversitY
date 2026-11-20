@@ -27,7 +27,9 @@ let selectedDifficulty=localStorage.getItem('neon-difficulty')||'normal';if(!DIF
 let game={state:'menu',speed:0,maxSpeed:30,distance:0,score:0,energy:100,crystals:0,collisionCooldown:0,uiTimer:0,shield:0,magnet:0,multiplier:0,combo:0,comboTimer:0,bestCombo:1,powerupsCollected:0,lastReward:0};let previous=0;
 function renderProgress(){const p=getProgress(progress),daily=getDailyMissions(progress),costume=getSelectedCostume(progress),ach=getAchievementList(progress);const el=id=>document.getElementById(id);
  if(el('profile-level'))el('profile-level').textContent=p.level;if(el('profile-xp'))el('profile-xp').textContent=`${Math.floor(p.xp)} / ${p.level*500} XP`;if(el('profile-coins'))el('profile-coins').textContent=p.coins;if(el('profile-best'))el('profile-best').textContent=Math.floor(p.bestScore);if(el('achievement-count'))el('achievement-count').textContent=`${p.achievements.length}/${ach.length}`;
- if(el('daily-list'))el('daily-list').innerHTML=daily.map(q=>`<div class="daily-row"><span>${q.title} · ${q.reward} CR</span><strong>${q.completed?'ГОТОВО':`${Math.floor(q.progress)}/${q.target}`}</strong><div class="daily-track"><i style="width:${Math.min(100,q.progress/q.target*100)}%"></i></div></div>`).join('');
+ const dailyMarkup=daily.map(q=>`<div class="daily-row"><span>${q.title} · ${q.reward} CR</span><strong>${q.completed?'ГОТОВО':`${Math.floor(q.progress)}/${q.target}`}</strong><div class="daily-track"><i style="width:${Math.min(100,q.progress/q.target*100)}%"></i></div></div>`).join('');
+ if(el('daily-list'))el('daily-list').innerHTML=dailyMarkup;
+ if(el('daily-screen-list'))el('daily-screen-list').innerHTML=dailyMarkup;
  if(el('costume-button'))el('costume-button').textContent=`ОБРАЗ: ${costume.name}`;
  if(el('costume-list'))el('costume-list').innerHTML=getCostumes(progress).map(c=>`<button type="button" class="costume-option ${c.selected?'selected':''}" data-costume-id="${c.id}" ${c.unlocked?'':'disabled'}><strong>${c.name}</strong><span>${c.unlocked?(c.selected?'ВЫБРАН':'ДОСТУПЕН'):`ОТКРОЕТСЯ НА ${c.level} УРОВНЕ`}</span></button>`).join('');
  if(el('achievement-list'))el('achievement-list').innerHTML=ach.map(a=>`<div class="achievement-item ${a.unlocked?'unlocked':''}"><strong>${a.unlocked?'✦':'◇'} ${a.name}</strong><span>${a.desc}</span></div>`).join('');
@@ -57,6 +59,7 @@ function bind(id,fn){document.getElementById(id)?.addEventListener('click',fn);}
 bind('play-button',startGame);bind('retry-button',startGame);bind('restart-button',startGame);bind('pause-button',pauseGame);bind('resume-button',resumeGame);bind('menu-button',returnMenu);bind('results-menu-button',returnMenu);
 bind('settings-button',()=>showScreen('settings-menu'));bind('settings-back',()=>showScreen('main-menu'));
 bind('progress-button',()=>{renderProgress();showScreen('progress-screen');});bind('progress-back',()=>showScreen('main-menu'));
+bind('daily-open-button',()=>{renderProgress();showScreen('daily-screen');});bind('daily-back',()=>showScreen('main-menu'));
 bind('costume-button',()=>{renderProgress();showScreen('characters-screen');});
 bind('characters-back',()=>showScreen('main-menu'));
 document.addEventListener('click',e=>{const option=e.target.closest('[data-costume-id]');if(!option)return;const c=selectCostume(progress,option.dataset.costumeId);if(!c){showNotification('ОБРАЗ ПОКА ЗАКРЫТ');return;}applyCostume();renderProgress();showNotification(`ОБРАЗ: ${c.name}`);});
