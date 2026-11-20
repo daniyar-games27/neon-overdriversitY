@@ -1,7 +1,7 @@
 {
   "name": "neon-overdrive",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "private": true,
   "type": "module",
-  "description": "NEON: OVERDRIVE \u2014 mobile-first cyberpunk runner with detailed ZERO character model and responsive swipe controls"
+  "description": "NEON: OVERDRIVE \u2014 v0.9 SDK bootstrap and mobile visibility pause improvements"
 }

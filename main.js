@@ -8,6 +8,7 @@ import {createAudio,initializeAudio,startAmbient,playCollision,playCollect,start
 import {createInterface,showScreen,showGameInterface,updateHUD,resetHUD,showResults,getBestScore,showNotification,disposeInterface} from './interface.js';
 import {createProgression,startRun,updateProgress,finishRun,getProgress,getDailyMissions,getCostumes,getSelectedCostume,getAchievementList,selectCostume} from './progression.js';
 import {createSettings,getQualityPreset,setQuality,setVolume,applyGraphicsSettings} from './settings.js';
+import {initPlatformSDK,signalGameReady} from './sdk.js';
 
 const canvas=document.getElementById('game-canvas');
 const isTouch=window.matchMedia?.('(pointer: coarse)').matches||innerWidth<760;
@@ -63,5 +64,7 @@ document.getElementById('quality-select')?.addEventListener('change',e=>{setQual
 document.getElementById('volume-slider')?.addEventListener('input',e=>{setVolume(settings,Number(e.target.value));setMasterVolume(audio,settings.masterVolume);});
 window.addEventListener('keydown',e=>{if(e.key==='Escape'){if(game.state==='playing')pauseGame();else if(game.state==='paused')resumeGame();else if(game.state==='menu'&&document.getElementById('progress-screen')?.classList.contains('active'))showScreen('main-menu');}});
 window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);applySettings();});
+let pausedByVisibility=false;
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.state==='playing'){pausedByVisibility=true;pauseGame();}else if(!document.hidden&&pausedByVisibility&&game.state==='paused'){pausedByVisibility=false;resumeGame();}});
 window.addEventListener('beforeunload',()=>{disposeControls(controls);disposeWorld(world);disposeEffects(effects);disposeAudio(audio);disposeInterface();});
-document.getElementById('quality-select').value=settings.quality;const difficultySelect=document.getElementById('difficulty-select');if(difficultySelect)difficultySelect.value=selectedDifficulty;difficultySelect?.addEventListener('change',()=>{selectedDifficulty=difficultySelect.value;localStorage.setItem('neon-difficulty',selectedDifficulty);});document.getElementById('volume-slider').value=settings.masterVolume;applySettings();applyCostume();showScreen('main-menu');requestAnimationFrame(frame);
+document.getElementById('quality-select').value=settings.quality;const difficultySelect=document.getElementById('difficulty-select');if(difficultySelect)difficultySelect.value=selectedDifficulty;difficultySelect?.addEventListener('change',()=>{selectedDifficulty=difficultySelect.value;localStorage.setItem('neon-difficulty',selectedDifficulty);});document.getElementById('volume-slider').value=settings.masterVolume;applySettings();applyCostume();showScreen('main-menu');initPlatformSDK().then(signalGameReady);requestAnimationFrame(frame);
